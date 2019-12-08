@@ -7,3 +7,4 @@
 
 12/04 operators.js          实现简易版的 new call apply bind typeof instanceof,测试闭包小case
 
+12/08 methods.js            实现Array.prototype上的flat 和 reduce
