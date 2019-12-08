@@ -62,7 +62,6 @@
         let o = {};
         constructor = typeof constructor === 'function' ? constructor : function() {};
         o.__proto__ = constructor.prototype; //这一步骤决定最后打印出来的o这个对象的类型
-        console.log(args)
         constructor.Apply(o, args); //至于打印出来的对象标识 取决于 原型上的constructor属性指向的函数名字
         return o;
     }
