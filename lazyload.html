@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>懒加载demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            position: absolute;
+            top: 100px;
+            left: 20vw;
+            width: 60%;
+            height: 400px;
+            margin: auto;
+            padding-top: 20px;
+            background: #eee;
+            overflow: auto;
+        }
+
+        .children>img {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="children child-1">
+            <img data-src="./images/1.png" src="./images/7.png">
+        </div>
+        <div class="children child-2">
+            <img data-src="./images/2.png" src="./images/7.png">
+        </div>
+        <div class="children child-3">
+            <img data-src="./images/3.png" src="./images/7.png">
+        </div>
+        <div class="children child-4">
+            <img data-src="./images/4.png" src="./images/7.png">
+        </div>
+        <div class="children child-5">
+            <img data-src="./images/5.png" src="./images/7.png">
+        </div>
+        <div class="children child-6">
+            <img data-src="./images/6.png" src="./images/7.png">
+        </div>
+    </div>
+
+    <!-- scripts -->
+    <script type="text/javascript">
+        const $ = document.querySelector.bind(document);
+        //第一步 获取父容器
+        const container = $('#container');
+        //第二步 获取父容器中图片元素 及其 需要加载的张数
+        const img = container.getElementsByTagName('img');
+        const len = img.length;
+        //第三步 创建变量用来记录图片加载到的位置,避免每次都从第一张图片开始遍历
+        let n = 0;
+        //第四步 位置判断以及替换占位图 data-src => src
+        const lazyload = () => {
+            //获取container底部距离<html>顶部像素距离 clientHeight不包括滚动条的宽度
+            let containerTop = container.offsetTop + container.clientHeight;
+            for (let i = n; i < len; ++i) {
+                //如果满足条件:图片距离<html>的顶部距离 < containerTop[容器底部那条线<html>顶部位置]
+                //这里不能使用 offsetTop 因为这个值是个固定的，使用getBoundingClientRect().top
+                if (img[i].getBoundingClientRect().top <= containerTop) {
+                    if (img[i].getAttribute('src') === './images/7.png') {
+                        img[i].src = img[i].dataset.src;
+                    }
+                    n = i + 1; //更新图片的起始遍历位置
+                }
+            }
+        };
+        //第五步 做一个简陋的节流函数 要求time时间必须执行一次,期间延迟执行delay
+        const throttle = (fun, delay, time) => {
+            let timeout, before = new Date;
+            return function() {
+                let now = new Date;
+                clearTimeout(timeout);
+                if (now - before >= time) {
+                    fun();
+                    before = now;
+                } else {
+                    timeout = setTimeout(fun, delay);
+                }
+            };
+        };
+        //最后 加载完成当前可视区域中的图片,滚动容器绑定事件
+        window.onload = lazyload;
+        container.onscroll = throttle(lazyload, 200, 400);
+    </script>
+</body>
+
+</html>
