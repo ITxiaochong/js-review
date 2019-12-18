@@ -8,3 +8,8 @@
 12/04 operators.js          实现简易版的 new call apply bind typeof instanceof,测试闭包小case
 
 12/08 methods.js            实现Array.prototype上的flat 和 reduce
+
+12/18 lazyload.html         实现带有节流的简易版懒加载,lazyload
+
+12/18 secondMenu.html       实现简易版二级悬浮菜单
+
