@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简单轮播demo</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #container {
+            position: relative;
+            margin: 100px auto;
+            background: #333;
+            width: 400px;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        #container:hover>.prior,
+        #container:hover>.next {
+            opacity: 1;
+            box-shadow: 0 2px 6px #333;
+            font-size: 30px;
+        }
+
+        .wheel {
+            position: absolute;
+            width: 2800px;
+            height: 100%;
+            list-style: none;
+        }
+
+        .wheel>.box-img {
+            float: left;
+            width: 400px;
+            height: 100%;
+        }
+
+        .prior,
+        .next {
+            user-select: none;
+            position: absolute;
+            top: 40%;
+            font-size: 20px;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            border-radius: 50%;
+            background: #eee;
+            opacity: 0;
+        }
+
+        .wheel>li {
+            text-align: center;
+            line-height: 300px;
+        }
+
+        .next {
+            right: 2%;
+        }
+
+        .prior {
+            left: 2%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <ul class="wheel">
+            <li class="box-img box-1" style="background-color: goldenrod;">
+                11111
+            </li>
+            <li class="box-img box-2" style="background-color: rgb(32, 218, 94);">
+                22222
+            </li>
+            <li class="box-img box-3" style="background-color: rgb(32, 175, 218);">
+                33333
+            </li>
+            <li class="box-img box-4" style="background-color: rgb(218, 32, 203);">
+                44444
+            </li>
+            <li class="box-img box-5" style="background-color: rgb(218, 91, 32);">
+                55555
+            </li>
+            <li class="box-img box-6" style="background-color: rgb(218, 32, 32);">
+                66666
+            </li>
+            <!-- 作为过渡用的第一张 -->
+            <li class="box-img box-1" style="background-color: goldenrod;">
+                11111
+            </li>
+        </ul>
+        <div class="prior">&lt;</div>
+        <div class="next">&gt;</div>
+    </div>
+    <!-- scripts -->
+    <script>
+        const $ = document.querySelector.bind(document);
+        const container = $('container');
+        const wheel = $('.wheel');
+        const next = $('.next');
+        const prior = $('.prior');
+        let n = 0; //前面有n张图片
+        next.onclick = function() {
+            if (n > 5) {
+                //转到真正的第一张位置
+                wheel.style.cssText = '';
+                //跳到第二张位置
+                setTimeout(() => {
+                    wheel.style.cssText = `transform:translate3d(-400px,0,0);transition-duration:.3s;`;
+                }, 30);
+                n = 1; //前面有1张
+            } else {
+                wheel.style.cssText = `transform:translate3d(${-400*++n}px,0,0);transition-duration:.3s;`;
+            }
+        };
+        prior.onclick = function() {
+            if (n <= 0) {
+                //转到最后一张的填充图
+                wheel.style.cssText = 'transform:translate3d(-2400px,0,0);';
+                //跳到真正图片的最后一张位置,也就是倒数第二张
+                setTimeout(() => {
+                    wheel.style.cssText = `transform:translate3d(-2000px,0,0);transition-duration:.3s;`;
+                }, 30);
+                n = 5; //前面有5张
+            } else {
+                wheel.style.cssText = `transform:translate3d(${-400*--n}px,0,0);transition-duration:.3s;`;
+            }
+        };
+    </script>
+</body>
+
+</html>
